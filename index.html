@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brand Masterclass - El Arte y la Ciencia del Branding</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+
+    <style>
+        /*------------------------------------*\
+          #RAÍZ Y SISTEMA DE DISEÑO
+        \*------------------------------------*/
+        :root {
+            --color-background: #FFFFFF;
+            --color-text: #111111;
+            --color-primary: #000000;
+            --color-light-gray: #f4f4f4;
+            --color-mid-gray: #e0e0e0;
+            --color-dark-gray: #333333;
+
+            --font-body: 'Inter', sans-serif;
+            --font-heading: 'Playfair Display', serif;
+
+            --spacing-xs: 0.5rem;
+            --spacing-s: 1rem;
+            --spacing-m: 2rem;
+            --spacing-l: 4rem;
+            --spacing-xl: 8rem;
+
+            --transition-fast: 0.2s ease;
+            --transition-smooth: 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        /*------------------------------------*\
+          #ESTILOS GLOBALES Y RESET
+        \*------------------------------------*/
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            font-size: 16px;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background-color: var(--color-background);
+            color: var(--color-text);
+            line-height: 1.7;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: var(--font-heading);
+            font-weight: 700;
+        }
+        
+        .section-title {
+            font-size: 3.5rem;
+            text-align: center;
+            margin-bottom: var(--spacing-l);
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 var(--spacing-m);
+        }
+
+        /*------------------------------------*\
+          #NAVEGACIÓN Y MENÚ MÓVIL
+        \*------------------------------------*/
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: var(--spacing-s) var(--spacing-m);
+            z-index: 1000;
+            transition: background-color var(--transition-smooth), border-color var(--transition-smooth);
+            background-color: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid transparent;
+        }
+
+        .navbar.scrolled {
+            background-color: rgba(0, 0, 0, 0.85);
+            border-bottom-color: var(--color-dark-gray);
+        }
+
+        .nav-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+        }
+
+        .logo {
+            font-family: var(--font-heading);
+            font-size: 1.8rem;
+            cursor: pointer;
+            transition: transform var(--transition-fast);
+        }
+        .navbar.scrolled .logo { color: var(--color-background); }
+
+        .nav-menu {
+            display: flex;
+            gap: var(--spacing-m);
+        }
+        .nav-item {
+            cursor: pointer;
+            font-weight: 500;
+            position: relative;
+            transition: color var(--transition-fast);
+        }
+        .navbar.scrolled .nav-item { color: var(--color-background); }
+
+        .nav-item::after {
+            content: '';
+            position: absolute;
+            width: 0%;
+            height: 2px;
+            background-color: var(--color-primary);
+            bottom: -5px;
+            left: 50%;
+            transform: translateX(-50%);
+            transition: width var(--transition-smooth);
+        }
+        .navbar.scrolled .nav-item::after { background-color: var(--color-background); }
+        .nav-item:hover::after { width: 100%; }
+        
+        .hamburger { display: none; }
+        .bar { display: block; width: 25px; height: 3px; margin: 5px auto; transition: all 0.3s ease-in-out; background-color: var(--color-primary); }
+        .navbar.scrolled .bar { background-color: var(--color-background); }
+
+        /*------------------------------------*\
+          #SECCIÓN HERO
+        \*------------------------------------*/
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            background: radial-gradient(ellipse at bottom, var(--color-light-gray) 0%, var(--color-background) 70%);
+            overflow: hidden;
+        }
+
+        .hero-content {
+            text-align: center;
+            z-index: 2;
+            padding: 0 var(--spacing-m);
+        }
+
+        .hero-title, .hero-subtitle, .hero .interactive-button {
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 1s var(--transition-smooth) forwards;
+        }
+        .hero-title { font-size: clamp(2.5rem, 8vw, 5rem); margin-bottom: var(--spacing-s); animation-delay: 0.2s;}
+        .hero-subtitle { font-size: clamp(1rem, 4vw, 1.5rem); margin-bottom: var(--spacing-m); animation-delay: 0.4s; font-weight: 300; max-width: 700px; margin-left:auto; margin-right:auto; }
+        .hero .interactive-button { animation-delay: 0.6s; }
+
+        .interactive-button {
+            background: var(--color-primary);
+            color: var(--color-background);
+            border: 2px solid var(--color-primary);
+            padding: var(--spacing-s) var(--spacing-m);
+            font-size: 1.1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            position: relative;
+            overflow: hidden;
+        }
+        .interactive-button:hover {
+            background-color: transparent;
+            color: var(--color-primary);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        
+        /*------------------------------------*\
+          #SECCIÓN PRINCIPIOS (ACORDEÓN)
+        \*------------------------------------*/
+        .principles-section {
+            background-color: var(--color-primary);
+            color: var(--color-background);
+            padding: var(--spacing-xl) 0;
+        }
+
+        .principles-grid {
+            display: grid;
+            gap: 1px;
+            background-color: var(--color-dark-gray);
+            border: 1px solid var(--color-dark-gray);
+        }
+
+        .principle-card {
+            background-color: var(--color-primary);
+            padding: var(--spacing-m);
+            cursor: pointer;
+            overflow: hidden;
+        }
+        
+        .principle-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: var(--spacing-m);
+        }
+
+        .principle-title { font-size: 2rem; }
+        .principle-icon { font-size: 2rem; transition: transform var(--transition-smooth); }
+        .principle-card.active .principle-icon { transform: rotate(45deg); }
+
+        .expanded-content {
+            display: grid;
+            grid-template-rows: 0fr;
+            transition: grid-template-rows var(--transition-smooth);
+        }
+        .principle-card.active .expanded-content { grid-template-rows: 1fr; }
+        .expanded-content-inner { overflow: hidden; }
+        .expanded-content p { padding-top: var(--spacing-s); opacity: 0.8; }
+        
+        /*------------------------------------*\
+          #NUEVA SECCIÓN: ARQUETIPOS
+        \*------------------------------------*/
+        .archetypes-section {
+            padding: var(--spacing-xl) 0;
+            background-color: var(--color-light-gray);
+        }
+        .archetype-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--spacing-m);
+        }
+        .archetype-card {
+            background: var(--color-background);
+            border: 1px solid var(--color-mid-gray);
+            aspect-ratio: 1 / 1.2;
+            padding: var(--spacing-m);
+            text-align: center;
+            cursor: pointer;
+            transition: all var(--transition-smooth);
+            position: relative;
+            transform-style: preserve-3d;
+        }
+        .archetype-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        .archetype-card .card-face {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            backface-visibility: hidden;
+            transition: transform var(--transition-smooth);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: var(--spacing-s);
+        }
+        .archetype-card .card-front {}
+        .archetype-card .card-back {
+            transform: rotateY(180deg);
+            background: var(--color-primary);
+            color: var(--color-background);
+            font-size: 0.9rem;
+        }
+        .archetype-card.is-flipped .card-front { transform: rotateY(-180deg); }
+        .archetype-card.is-flipped .card-back { transform: rotateY(0deg); }
+        .archetype-icon { font-size: 3rem; margin-bottom: var(--spacing-s); }
+        .archetype-title { font-family: var(--font-body); font-weight: 500; font-size: 1.2rem; }
+        .archetype-desc { font-size: 0.85rem; line-height: 1.5; }
+        .archetype-desc strong { color: #aaa; display: block; margin-top: var(--spacing-xs); font-family: var(--font-heading); }
+
+        /*------------------------------------*\
+          #LABORATORIO DE TIPOGRAFÍA
+        \*------------------------------------*/
+        .typography-section { padding: var(--spacing-xl) 0; }
+        
+        .typography-playground {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: var(--spacing-l);
+            align-items: center;
+        }
+        /* ... (resto de estilos de tipografía adaptados a las variables) */
+
+
+        /*------------------------------------*\
+          #RESPONSIVE DESIGN
+        \*------------------------------------*/
+        @media (max-width: 992px) {
+            .nav-menu {
+                position: fixed;
+                left: -100%;
+                top: 0;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                background-color: var(--color-primary);
+                width: 100%;
+                height: 100vh;
+                text-align: center;
+                transition: left var(--transition-smooth);
+                gap: var(--spacing-l);
+            }
+            .nav-menu.active { left: 0; }
+            .nav-item { font-size: 2rem; color: var(--color-background); }
+            .nav-item:hover::after { width: 0; } /* Desactivar línea en menú móvil */
+
+            .hamburger {
+                display: block;
+                cursor: pointer;
+                z-index: 1001;
+            }
+            .hamburger.active .bar:nth-child(2) { opacity: 0; }
+            .hamburger.active .bar:nth-child(1) { transform: translateY(8px) rotate(45deg); background-color: var(--color-background); }
+            .hamburger.active .bar:nth-child(3) { transform: translateY(-8px) rotate(-45deg); background-color: var(--color-background); }
+            
+            .typography-playground, .logo-builder { grid-template-columns: 1fr; }
+        }
+
+        /* Animaciones de entrada */
+        .reveal {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 0.8s var(--transition-smooth), transform 0.8s var(--transition-smooth);
+        }
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar" id="navbar">
+        <div class="container nav-content">
+            <div class="logo" onclick="scrollToSection('hero')">Brand Masterclass</div>
+            <div class="nav-menu" id="nav-menu">
+                <div class="nav-item" onclick="scrollToSection('principles')">Principios</div>
+                <div class="nav-item" onclick="scrollToSection('archetypes')">Arquetipos</div>
+                <div class="nav-item" onclick="scrollToSection('typography')">Tipografía</div>
+                </div>
+            <div class="hamburger" id="hamburger">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+
+    <section class="hero" id="hero">
+        <div class="hero-content">
+            <h1 class="hero-title">El Arte y la Ciencia del Branding</h1>
+            <p class="hero-subtitle">Una inmersión profunda en la estrategia y creatividad que construyen marcas legendarias. Aprende de forma interactiva.</p>
+            <button class="interactive-button" onclick="scrollToSection('principles')">Iniciar Masterclass</button>
+        </div>
+    </section>
+
+    <section class="principles-section" id="principles">
+        <div class="container">
+            <h2 class="section-title reveal">Los Pilares del Branding Moderno</h2>
+            <div class="principles-grid reveal">
+                <div class="principle-card">
+                    <div class="principle-header">
+                        <h3 class="principle-title">01. Coherencia</h3>
+                        <div class="principle-icon">+</div>
+                    </div>
+                    <div class="expanded-content">
+                        <div class="expanded-content-inner">
+                            <p>La coherencia no es repetición, es consistencia en el mensaje, la estética y la experiencia. Genera confianza y familiaridad, haciendo que tu marca sea un pilar predecible y fiable en un mundo caótico.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="principle-card">
+                    <div class="principle-header">
+                        <h3 class="principle-title">02. Diferenciación</h3>
+                        <div class="principle-icon">+</div>
+                    </div>
+                    <div class="expanded-content"><div class="expanded-content-inner"><p>En un mercado saturado, ser diferente es más importante que ser "mejor". Encuentra tu propuesta de valor única y comunícala de forma audaz. No compitas, crea tu propia categoría.</p></div></div>
+                </div>
+                 <div class="principle-card">
+                    <div class="principle-header">
+                        <h3 class="principle-title">03. Emoción</h3>
+                        <div class="principle-icon">+</div>
+                    </div>
+                    <div class="expanded-content"><div class="expanded-content-inner"><p>Las decisiones de compra son 90% emocionales. Las marcas más fuertes no venden productos, venden sentimientos: seguridad, estatus, alegría, pertenencia. ¿Qué emoción evoca tu marca?</p></div></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="archetypes-section" id="archetypes">
+        <div class="container">
+            <h2 class="section-title reveal">Descubre tu Arquetipo de Marca</h2>
+            <div class="archetype-grid reveal">
+                <div class="archetype-card" data-archetype="sage">
+                    <div class="card-face card-front">
+                        <div class="archetype-icon">🧠</div>
+                        <h3 class="archetype-title">El Sabio</h3>
+                    </div>
+                    <div class="card-face card-back">
+                        <p class="archetype-desc">Busca la verdad y el conocimiento. Valora la sabiduría y la inteligencia por encima de todo. <strong>MARCAS: Google, BBC, MIT.</strong></p>
+                    </div>
+                </div>
+                <div class="archetype-card" data-archetype="hero">
+                    <div class="card-face card-front"><div class="archetype-icon">🏆</div><h3 class="archetype-title">El Héroe</h3></div>
+                    <div class="card-face card-back"><p class="archetype-desc">Busca probar su valía a través de actos de coraje y superación. Inspira a ser el mejor. <strong>MARCAS: Nike, Adidas, FedEx.</strong></p></div>
+                </div>
+                <div class="archetype-card" data-archetype="outlaw">
+                    <div class="card-face card-front"><div class="archetype-icon">🔥</div><h3 class="archetype-title">El Rebelde</h3></div>
+                    <div class="card-face card-back"><p class="archetype-desc">Busca romper las reglas y luchar contra lo establecido. Atrae a quienes se sienten marginados. <strong>MARCAS: Harley-Davidson, Diesel, Virgin.</strong></p></div>
+                </div>
+                 </div>
+        </div>
+    </section>
+    
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+
+        const App = {
+            init() {
+                this.setupMobileMenu();
+                this.setupNavbarScroll();
+                this.setupAccordion();
+                this.setupArchetypeCards();
+                this.setupScrollAnimations();
+                
+                // Mantiene el scope de 'this'
+                this.scrollToSection = this.scrollToSection.bind(this);
+                document.querySelectorAll('.nav-item, .logo, .interactive-button').forEach(el => {
+                    const sectionId = el.getAttribute('onclick')?.match(/'([^']+)'/)?.[1];
+                    if (sectionId) {
+                        el.addEventListener('click', (e) => {
+                            e.preventDefault();
+                            this.scrollToSection(sectionId);
+                        });
+                    }
+                });
+            },
+
+            setupMobileMenu() {
+                const hamburger = document.getElementById('hamburger');
+                const navMenu = document.getElementById('nav-menu');
+                hamburger.addEventListener('click', () => {
+                    hamburger.classList.toggle('active');
+                    navMenu.classList.toggle('active');
+                });
+                document.querySelectorAll('.nav-item').forEach(item => {
+                    item.addEventListener('click', () => {
+                         hamburger.classList.remove('active');
+                         navMenu.classList.remove('active');
+                    });
+                });
+            },
+
+            setupNavbarScroll() {
+                const navbar = document.getElementById('navbar');
+                window.addEventListener('scroll', () => {
+                    navbar.classList.toggle('scrolled', window.scrollY > 50);
+                });
+            },
+
+            setupAccordion() {
+                const cards = document.querySelectorAll('.principle-card');
+                cards.forEach(card => {
+                    card.addEventListener('click', () => {
+                        // Cierra otros acordeones si quieres que solo uno esté abierto
+                        // cards.forEach(c => { if(c !== card) c.classList.remove('active') });
+                        card.classList.toggle('active');
+                    });
+                });
+            },
+
+            setupArchetypeCards() {
+                const cards = document.querySelectorAll('.archetype-card');
+                cards.forEach(card => {
+                    card.addEventListener('click', () => {
+                        card.classList.toggle('is-flipped');
+                    });
+                });
+            },
+
+            setupScrollAnimations() {
+                const revealElements = document.querySelectorAll('.reveal');
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('visible');
+                            observer.unobserve(entry.target);
+                        }
+                    });
+                }, { threshold: 0.1 });
+
+                revealElements.forEach(el => observer.observe(el));
+            },
+
+            scrollToSection(sectionId) {
+                const section = document.getElementById(sectionId);
+                if (section) {
+                    section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            }
+        };
+
+        App.init();
+
+    });
+    </script>
+</body>
+</html>
